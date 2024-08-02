@@ -26,13 +26,13 @@ import time
 import time
 
 
-conn = cx_Oracle.connect("kpmg", "Asd$1234", "HISTDB1")
+conn = cx_Oracle.connect("db_username", "db_password", "db_name")
 tableau_server_config = {
                 'my_env': {
-                        'server': 'https://reports.manappuram.com',
+                        'server': 'tableau_url',
                         'api_version': "3.17",
-                        'username': 'tableauadministrator',
-                        'password': 'M@fil@123',
+                        'username': 'tableau_user_name',
+                        'password': 'tableau_password',
                         'site_name': 'Default',
                         'site_url': ''
                 }
@@ -42,43 +42,26 @@ conn.sign_in()
 site_views_df = querying.get_views_dataframe(conn)
 site_views_detailed_df = flatten_dict_column(site_views_df, keys=['name', 'id'], col_name='workbook')
 site_views_detailed_df.tail(60)
-relevant_views_df = site_views_detailed_df[site_views_detailed_df['workbook_name'] == 'Gold photo verification Report']
+relevant_views_df = site_views_detailed_df[site_views_detailed_df['workbook_name'] == 'Workbook Name']
 print(relevant_views_df)
-# relevant_views_df.refresh(workbook_id='949d788d-c89f-432d-8af2-c03990e149c5')
 
-# fzm_data='4bb1459c-b3e6-4a5b-8b07-0eaf77f98a36'
-fzm_data='8a45b7db-e53e-4637-a173-777a7aecc370'
+
+
+fzm_data='fzm_workbook_id'
 view_img = conn.query_view_image(view_id=fzm_data)
 print(view_img)
-with open(r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.png","wb") as f:
+with open(r"path_to_image","wb") as f:
    
     f.write(view_img.content)
 print("Third section completed................")
-conn = cx_Oracle.connect("kpmg", "Asd$1234", "HISTDB1")
+conn = cx_Oracle.connect("db_username", "db_pwd", "db_name")
 print("Oracle database connected")
 print("Tableau server connected")
 
         
 
 
-df1=pd.read_sql("""select distinct q.cust_id,
-                e.name customer_name,
-                q.branch_id,
-                q.pledge_no,
-                q.pledge_val,
-                z.area_name,
-                z.reg_name,
-                z.zonal_name
-
-  from mana0809.pledge_master@uatr_backup2 q
-  left outer join mana0809.customer@uatr_backup2 e
-    on (e.cust_id = q.cust_id)
-  LEFT OUTER JOIN tbl_fake_gold_verification s
-    ON (q.pledge_no = s.pledge_no)
-  left outer join mana0809.branch_dtl_new@uatr_backup2 z
-    on (q.branch_id = z.branch_id)
- where s.status = 1
-   AND s.CREATED_DT = trunc(sysdate) - 1""",con=conn)
+df1=pd.read_sql("""Query to Fetch data
 #---------------------------------------------------------------------
 
 
@@ -87,7 +70,7 @@ print("Query section completed...........")
 
 
 if not df1.empty:
-    writer=pd.ExcelWriter("C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.xlsx",engine="openpyxl")
+    writer=pd.ExcelWriter("path_to_excel",engine="openpyxl")
     df1.to_excel(writer, sheet_name="Gold_verification_report", index=False)
 
 
@@ -96,7 +79,7 @@ if not df1.empty:
     print("Excel downloading section completed............")
 
 
-    workbook = openpyxl.load_workbook('C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.xlsx')
+    workbook = openpyxl.load_workbook('path_to_excel')
     print("wb open")
     sheet_names = workbook.sheetnames
     heading_color =  'E2BCB7'    #'73BCC5'#'8080ff'  # Red color
@@ -115,10 +98,6 @@ if not df1.empty:
         for cell in sheet[1]:
             cell.fill = header_fill
             cell.font = header_font
-        # body_fill = PatternFill(start_color=body_color, end_color=body_color, fill_type='solid')
-        # for row in sheet.iter_rows(min_row=2):
-        #     for cell in row:
-        #         cell.fill = body_fill
                 
         for column in sheet.columns:
             non_empty_values = [cell.value for cell in column if cell.value]
@@ -138,10 +117,10 @@ if not df1.empty:
         for row in sheet.iter_rows():
             for cell in row:
                 cell.border = border_style
-    workbook.save('C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.xlsx')
+    workbook.save('path_to_excel')
     print("done")
    
-    workbook = openpyxl.load_workbook(r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.xlsx")
+    workbook = openpyxl.load_workbook(r"path_to_excel")
     worksheet = workbook["Gold_verification_report"]
 
     # if worksheet.max_row == 0:
@@ -149,21 +128,17 @@ if not df1.empty:
     s.starttls()
     # print("aaa")
   
-    s.login('iotautomation@manappuram.com','ybjmxbfdyzkdnjtw')
+    s.login('mail_id_username','mail_id_pwd')
     
     print("Login the mail address")
     msg = EmailMessage()
     print("Ready for mailing")
 
-    msg['Subject'] = 'Gold ornament photos not available for yesterday pledges'
-    # msg['From'] = '<internalaudit1@manappuram.com>'
-    # msg['To'] = 'Audit Research Wing<researchwing@manappuram.com>','LAXMAN TAGGINAVAR <headresearchwing@manappuram.com>'
-    # msg['Cc'] = 'RIJU P<gmaudit@manappuram.com>','ANN MARY M B<dataservice26@manappuram.com>','ANJANA V P<iotsupport15@manappuram.com>'
+    msg['Subject'] = 'Subject'
 
-    msg['From']='<iotautomation@manappuram.com>'
-    # msg['To']='<glalertsaudit@manappuram.com>'
+    msg['From']='From mail ID'
 
-    with open(r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.xlsx", 'rb') as ra:
+    with open(r"path_to_excel", 'rb') as ra:
         attachment = ra.read()
     msg.add_related(attachment, maintype='application', subtype='xlsx', filename='Gold verification report.xlsx')
     image_cid = make_msgid(domain='mandala.com')
@@ -190,7 +165,7 @@ if not df1.empty:
 
 
 
-    with open(r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\Gold_verification_report.png", 'rb') as img:
+    with open(r"path_to_image", 'rb') as img:
         maintype, subtype = mimetypes.guess_type(img.name)[0].split('/')
         msg.get_payload()[1].add_related(img.read(),
                                             maintype=maintype,
@@ -202,7 +177,6 @@ if not df1.empty:
     s.quit()
     print("Mail send")
     print("final section completed sucessfully.............")
-    # os.remove(r"C:\\Users\\398504\\CRF\\crf22\\Fake_NEFT_Verification-121681\\fake_NEFT_report.png")
     print("Image removed")
 else:
     print("                                                                     ")
