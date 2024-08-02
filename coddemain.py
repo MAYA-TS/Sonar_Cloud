@@ -45,8 +45,8 @@ def move_images(source_folder, destination_folder, destination_folder1):
                 print(f"Moved {filename} to {destination_folder1}")
  
 if __name__ == "__main__":
-    source_folder = r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\downloaded_images\\"
-    destination_folder = r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\fake\\"
-    destination_folder1 = r"C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\real\\"
+    source_folder = r"source_folder_path"
+    destination_folder = r"destination_folder_path"
+    destination_folder1 = r"destination2_folder_path"
  
     move_images(source_folder, destination_folder, destination_folder1)
