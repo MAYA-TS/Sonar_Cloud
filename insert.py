@@ -7,10 +7,10 @@ import zipfile
 from datetime import datetime, timedelta
 
 
-connection1 = cx_Oracle.connect("kpmg", "Asd$1234", "HISTDB1")
+connection1 = cx_Oracle.connect("db_username", "db_pwd", "db_name")
 cursor = connection1.cursor()
 
-path_images="C:\\Users\\398504\\CRF\\crf23\\Gold_photo_verification_122016\\fake\\"
+path_images="Folder_path"
 count=0
 for filename in os.listdir(path_images):
         if filename.endswith('.JPEG') or filename.endswith('.jpg'):
@@ -22,11 +22,11 @@ for filename in os.listdir(path_images):
             current_date = datetime.strftime(current_date1, '%d-%m-%Y')
 
             status = 1
-            connection = cx_Oracle.connect("kpmg", "Asd$1234", "HISTDB1")
+            connection = cx_Oracle.connect("db_username", "db_pwd", "db_name")
             cursor = connection.cursor()
 
 
-            cursor.execute("INSERT INTO tbl_fake_gold_verification(PLEDGE_NO,CREATED_DT, STATUS,cust_id) VALUES (:pledge_no,TO_DATE(:1, 'DD-MM-YYYY'), :status,:cust_id)",
+            cursor.execute("Query for insertion",
                         (pledge_no,current_date,status,CUST_ID))
             cursor.close()
             print(pledge_no, "inserted")
